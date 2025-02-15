@@ -10,11 +10,21 @@ def test_get_mask_card_number_normal_format(card_number, expected):
     assert get_mask_card_number(card_number) == expected
 
 
-@pytest.mark.parametrize("card_numbers, expected", [("1000222233skypro", "Данные введены некорректно"),
+@pytest.mark.parametrize("card_number, expected", [("1000222233skypro", "Данные введены некорректно"),
                                                    ("", "Данные введены некорректно"),
                                                    ("3000    60607070", "Данные введены некорректно")])
-def test_get_mask_card_number_not_numbers(card_numbers, expected):
+def test_get_mask_card_number_not_numbers(card_number, expected):
     with pytest.raises(ValueError) as exc_info:
-        get_mask_card_number(card_numbers)
+        get_mask_card_number(card_number)
 
-        assert str(exc_info) == expected
+    assert str(exc_info.value) == expected
+
+
+@pytest.mark.parametrize("card_number, expected", [("111122223333444", "Данные введены некорректно"),
+                                                   ("11112222333344445", "Данные введены некорректно"),
+                                                   ("", "Данные введены некорректно")])
+def test_get_mask_card_number_incorrect_length(card_number, expected):
+    with pytest.raises(ValueError) as exc_info:
+        get_mask_card_number(card_number)
+
+    assert str(exc_info.value) == expected
