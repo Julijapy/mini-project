@@ -1,6 +1,7 @@
 import pytest
 
 from src.masks import get_mask_card_number, get_mask_account
+from src.widget import mask_account_card
 
 
 @pytest.mark.parametrize("card_number, expected", [("1000222233334444", "1000 22** **** 4444"),
