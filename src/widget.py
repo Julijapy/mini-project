@@ -1,5 +1,7 @@
 from src.masks import get_mask_account, get_mask_card_number
 
+from datetime import datetime
+
 
 def mask_account_card(user_card: str) -> str:
     """Функция, которая маскирует номер или счет карты"""
@@ -27,6 +29,26 @@ def mask_account_card(user_card: str) -> str:
 
 def get_date(info: str) -> str:
     """Функция, которая приводит данные о дате в удобный формат"""
-    date_info_slice = info[:10].split("-")
-    formatted_date = date_info_slice[-1:-4:-1]
-    return ".".join(formatted_date)
+    date_format = ""
+    formatted_date = ""
+    for i in info:
+        if i.isdigit():
+            date_format += "*"
+            formatted_date += i
+        elif not i.isalnum():
+            date_format += "."
+            formatted_date += "."
+        elif i == "T":
+            date_format += i
+            formatted_date += i
+        else:
+            raise ValueError("Некорректная дата")
+    if date_format == "****.**.**T**.**.**.******":
+        date_object = datetime.strptime(formatted_date, "%Y.%m.%dT%H.%M.%S.%f")
+        date_str = date_object.strftime("%d.%m.%Y")
+    elif date_format == "****.**.**":
+        date_object = datetime.strptime(formatted_date, "%Y.%m.%d")
+        date_str = date_object.strftime("%d.%m.%Y")
+    else:
+        raise ValueError("Некорректная дата")
+    return date_str
