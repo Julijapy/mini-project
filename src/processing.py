@@ -2,16 +2,19 @@ from typing import Any
 
 
 def filter_by_state(
-    data: list[dict[str, Any]], state="EXECUTED"
+    data: list[dict[str, Any]], state='EXECUTED'
 ) -> list[dict[str, Any]]:
     """Функция возвращает новый список словарей, содержащий только те словари,
     у которых ключ state соответствует указанному значению"""
     new_list = []
-    for i in data:
-        for key, value in i.items():
-            if value == state:
-                new_list.append(i)
-
+    for element in data:
+        for key, value in element.items():
+            if value == '':
+                continue
+            elif value == state:
+                new_list.append(element)
+    if not new_list:
+        raise ValueError("Список пуст")
     return new_list
 
 
