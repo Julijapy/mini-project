@@ -1,20 +1,50 @@
-from src.widget import get_date, mask_account_card
+import pytest
 
-from src.processing import filter_by_state, sort_by_date
+from src.masks import get_mask_card_number, get_mask_account
+from src.widget import mask_account_card
 
-print(mask_account_card("Счет 73654108430135874305"))
 
-print(get_date("2024-03-11T02:26:18.671407"))
+@pytest.mark.parametrize("card_number, expected", [("1000222233334444", "1000 22** **** 4444"),
+                                                   ("2000202030304040", "2000 20** **** 4040"),
+                                                   ("3000505060607070", "3000 50** **** 7070")])
+def test_get_mask_card_number_normal_format(card_number, expected):
+    assert get_mask_card_number(card_number) == expected
 
-print(filter_by_state([{'id': 41428829, 'state': 'EXECUTED', 'date': '2019-07-03T18:35:29.512364'},
-                       {'id': 939719570, 'state': 'EXECUTED', 'date': '2018-06-30T02:08:58.425572'},
-                       {'id': 594226727, 'state': 'CANCELED', 'date': '2018-09-12T21:27:25.241689'},
-                       {'id': 615064591, 'state': 'CANCELED', 'date': '2018-10-14T08:21:33.419441'}],
-                      state="EXECUTED")
-      )
 
-print(sort_by_date([{'id': 41428829, 'state': 'EXECUTED', 'date': '2019-07-03T18:35:29.512364'},
-                    {'id': 939719570, 'state': 'EXECUTED', 'date': '2018-06-30T02:08:58.425572'},
-                    {'id': 594226727, 'state': 'CANCELED', 'date': '2018-09-12T21:27:25.241689'},
-                    {'id': 615064591, 'state': 'CANCELED', 'date': '2018-10-14T08:21:33.419441'}])
-      )
+@pytest.mark.parametrize("card_number, expected", [("1000222233skypro", "Данные введены некорректно"),
+                                                   (" ", "Данные введены некорректно"),
+                                                   ("3000    60607070", "Данные введены некорректно")])
+def test_get_mask_card_number_not_numbers(card_number, expected):
+    with pytest.raises(ValueError) as exc_info:
+        get_mask_card_number(card_number)
+
+    assert str(exc_info.value) == expected
+
+
+@pytest.mark.parametrize("card_number, expected", [("111122223333444", "Данные введены некорректно"),
+                                                   ("11112222333344445", "Данные введены некорректно"),
+                                                   ("", "Данные введены некорректно")])
+def test_get_mask_card_number_incorrect_length(card_number, expected):
+    with pytest.raises(ValueError) as exc_info:
+        get_mask_card_number(card_number)
+
+    assert str(exc_info.value) == expected
+
+
+@pytest.mark.parametrize("account_number, expected", [("11112222333344445555", "**5555"),
+                                                      ("12345678901234567890", "**7890"),
+                                                      ("12121212121212121212", "**1212")])
+def test_get_mask_account_normal(account_number, expected):
+    assert get_mask_account(account_number) == expected
+
+
+@pytest.mark.parametrize("account_number, expected", [("111122223333444skypro", "Данные введены некорректно"),
+                                                      ("1234 901234567890", "Данные введены некорректно"),
+                                                      (" ", "Данные введены некорректно"),
+                                                      ("123", "Данные введены некорректно"),
+                                                      ("12121212121212121212121212", "Данные введены некорректно")])
+def test_get_mask_account_incorrect(account_number, expected):
+    with pytest.raises(ValueError) as exc_info:
+        get_mask_account(account_number)
+
+    assert str(exc_info.value) == expected
