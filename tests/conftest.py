@@ -83,7 +83,7 @@ def sort_result_same_dates():
 
 
 @pytest.fixture
-def date_value_incorrect():
+def date_all_value_incorrect():
     return [{'id': 41428829, 'state': 'EXECUTED', 'date': ' '},
             {'id': 939719570, 'state': 'EXECUTED', 'date': '2018'},
             {'id': 594226727, 'state': 'CANCELED', 'date': '2018/09/12T21:27:25.241689'},
