@@ -1,6 +1,6 @@
 import pytest
 
-from src.processing import filter_by_state
+from src.processing import filter_by_state, sort_by_date
 
 
 def test_filter_by_state_normal(data_normal, filtering_result_normal):
@@ -43,8 +43,53 @@ def test_filter_by_state_no_executed(data, expected):
         filter_by_state(data)
     assert str(exc_info.value) == expected
 
-# print(sort_by_date([{'id': 41428829, 'state': 'EXECUTED', 'date': '2019-07-03T18:35:29.512364'},
-#                     {'id': 939719570, 'state': 'EXECUTED', 'date': '2018-06-30T02:08:58.425572'},
-#                     {'id': 594226727, 'state': 'CANCELED', 'date': '2018-09-12T21:27:25.241689'},
-#                     {'id': 615064591, 'state': 'CANCELED', 'date': '2018-10-14T08:21:33.419441'}])
-#       )
+
+def test_sort_by_date_normal(data_normal, sort_by_date_result_normal):
+    assert sort_by_date(data_normal) == sort_by_date_result_normal
+
+
+def test_sort_by_date_increasing(data_normal, sort_by_date_increasing):
+    assert sort_by_date(data_normal, False) == sort_by_date_increasing
+
+
+def test_sort_by_date_with_the_same_dates(same_dates, sort_result_same_dates):
+    assert sort_by_date(same_dates) == sort_result_same_dates
+
+
+def test_sort_by_date_list_empty(date_list_empty, filtering_result_lack_of_status_executed):
+    with pytest.raises(ValueError) as exc_info:
+        sort_by_date(date_list_empty)
+    assert str(exc_info.value) == filtering_result_lack_of_status_executed
+
+
+@pytest.mark.parametrize("date_empty, expected",[([{'id': 41428829, 'state': 'EXECUTED'},
+                                                   {'id': 939719570, 'state': 'EXECUTED', 'date': ''},
+                                                   {'id': 594226727, 'state': 'CANCELED', 'date': '2018-09-12T21:27:25.241689'},
+                                                   {'id': 615064591, 'state': 'CANCELED', 'date': '2018-10-14T08:21:33.419441'}],
+                                                  [{'id': 615064591, 'state': 'CANCELED', 'date': '2018-10-14T08:21:33.419441'},
+                                                   {'id': 594226727, 'state': 'CANCELED', 'date': '2018-09-12T21:27:25.241689'}])])
+def test_sort_by_date_empty_date(date_empty, expected):
+    assert sort_by_date(date_empty) == expected
+
+
+@pytest.mark.parametrize("format_incorrect, expected", [([{'id': 41428829, 'state': 'EXECUTED', 'date': '2019/07/03T18:35:29.512364'},
+                                                          {'id': 939719570, 'state': 'EXECUTED', 'date': '2018-06-30'},
+                                                          {'id': 41428829, 'state': 'EXECUTED', 'date': '2019'},
+                                                          {'id': 939719570, 'state': 'EXECUTED', 'date': '2018.06.30'},
+                                                          {'id': 594226727, 'state': 'CANCELED', 'date': 'abcabcabcabc'},
+                                                          {'id': 615064591, 'state': 'CANCELED', 'date': '123123123123123123123'},
+                                                          {'id': 41428829, 'state': 'EXECUTED', 'date': ' '},
+                                                          {'id': 939719570, 'state': 'EXECUTED', 'date': '2018-6-30T02:08:58.425572'},
+                                                          {'id': 594226727, 'state': 'CANCELED', 'date': '2018-09-12T21:27:25.241689'},
+                                                          {'id': 615064591, 'state': 'CANCELED', 'date': '2018-10-14T08:21:33.419441'}],
+                                                         [{'id': 615064591, 'state': 'CANCELED', 'date': '2018-10-14T08:21:33.419441'},
+                                                          {'id': 594226727, 'state': 'CANCELED', 'date': '2018-09-12T21:27:25.241689'},
+                                                          {'id': 939719570, 'state': 'EXECUTED', 'date': '2018-06-30'}])])
+def test_sort_by_date_format_incorrect(format_incorrect, expected):
+    assert sort_by_date(format_incorrect) == expected
+
+
+def test_sort_by_date_list_incorrect_value(date_list_incorrect_value, filtering_result_lack_of_status_executed):
+    with pytest.raises(ValueError) as exc_info:
+        sort_by_date(date_list_incorrect_value)
+    assert str(exc_info.value) == filtering_result_lack_of_status_executed
