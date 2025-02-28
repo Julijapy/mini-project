@@ -1,6 +1,6 @@
-from src.masks import get_mask_account, get_mask_card_number
-
 from datetime import datetime
+
+from src.masks import get_mask_account, get_mask_card_number
 
 
 def mask_account_card(user_card: str) -> str:
@@ -11,9 +11,9 @@ def mask_account_card(user_card: str) -> str:
         if item.isalpha():
             card_type.append(item)
         elif item.isdigit():
-            if  "Счет" in card_details and len(item) == 20:
+            if "Счет" in card_details and len(item) == 20:
                 card_number = get_mask_account(item)
-            elif  "Счет" in card_details and len(item) == 16:
+            elif "Счет" in card_details and len(item) == 16:
                 raise ValueError("Данные введены некорректно")
             elif len(item) == 16:
                 card_number = get_mask_card_number(item)

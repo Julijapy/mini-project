@@ -1,17 +1,14 @@
+from datetime import datetime
 from typing import Any
 
-from datetime import datetime
 
-
-def filter_by_state(
-    data: list[dict[str, Any]], state='EXECUTED'
-) -> list[dict[str, Any]]:
+def filter_by_state(data: list[dict[str, Any]], state="EXECUTED") -> list[dict[str, Any]]:
     """Функция возвращает новый список словарей, содержащий только те словари,
     у которых ключ state соответствует указанному значению"""
     new_list = []
     for element in data:
         for key, value in element.items():
-            if value == '':
+            if value == "":
                 continue
             elif value == state:
                 new_list.append(element)
