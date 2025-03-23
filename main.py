@@ -1,4 +1,4 @@
-from src.generators import filter_by_currency
+from src.generators import filter_by_currency, transaction_descriptions
 
 transactions = [
         {
@@ -9,7 +9,7 @@ transactions = [
                 "amount": "9824.07",
                 "currency": {
                     "name": "USD",
-                    "code": ""
+                    "code": "USD"
                 }
             },
             "description": "Перевод организации",
@@ -24,7 +24,7 @@ transactions = [
                 "amount": "79114.93",
                 "currency": {
                     "name": "USD",
-                    "code": ""
+                    "code": "USD"
                 }
             },
             "description": "Перевод со счета на счет",
@@ -54,7 +54,7 @@ transactions = [
                 "amount": "56883.54",
                 "currency": {
                     "name": "USD",
-                    "code": ""
+                    "code": "USD"
                 }
             },
             "description": "Перевод с карты на карту",
@@ -84,5 +84,15 @@ one_transaction = filter_by_currency(all_transactions=transactions)
 def transaction_info():
     try:
         return next(one_transaction)
+    except StopIteration:
+        return "Список транзакций пуст"
+
+
+descriptions_data = transaction_descriptions(all_transactions=transactions)
+
+
+def description_transaction_info():
+    try:
+        return next(descriptions_data)
     except StopIteration:
         return "Список транзакций пуст"
