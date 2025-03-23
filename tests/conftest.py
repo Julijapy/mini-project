@@ -1,7 +1,7 @@
 import pytest
 
 @pytest.fixture
-def transactions():
+def transactions_list():
     return [
         {
             "id": 939719570,
