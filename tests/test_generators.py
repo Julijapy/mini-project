@@ -1,6 +1,6 @@
-from src.generators import filter_by_currency
+from src.generators import filter_by_currency, transaction_descriptions
 
-from main import transaction_info
+from main import transaction_info, description_transaction_info
 
 
 def test_filter_by_currency(transactions_list, filter_by_currency_result):
@@ -55,3 +55,17 @@ def test_transaction_info():
             "to": "Visa Platinum 8990922113665229"
         }
     assert transaction_info() == "Список транзакций пуст"
+
+
+def test_transaction_descriptions(transactions_list, transaction_descriptions_result):
+    """Тестирование функции при стандартных данных"""
+    assert list(transaction_descriptions(transactions_list)) == transaction_descriptions_result
+
+
+def test_description_transaction_info():
+    assert description_transaction_info() == "Перевод организации"
+    assert description_transaction_info() == "Перевод со счета на счет"
+    assert description_transaction_info() == "Перевод со счета на счет"
+    assert description_transaction_info() == "Перевод с карты на карту"
+    assert description_transaction_info() == "Перевод организации"
+    assert description_transaction_info() == "Список транзакций пуст"
