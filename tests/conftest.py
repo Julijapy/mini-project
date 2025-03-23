@@ -129,3 +129,8 @@ def filter_by_currency_result():
             "to": "Visa Platinum 8990922113665229"
         }
     ]
+
+
+@pytest.fixture
+def transaction_descriptions_result():
+    return ['Перевод организации', 'Перевод со счета на счет', 'Перевод со счета на счет', 'Перевод с карты на карту', 'Перевод организации']
