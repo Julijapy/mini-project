@@ -95,3 +95,5 @@ def get_card_number_info():
         return next(card_number_info)
     except StopIteration:
         return "Список транзакций пуст"
+
+# homework_11_1 done
