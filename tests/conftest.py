@@ -64,7 +64,7 @@ def transactions_list():
             "description": "Перевод организации",
             "from": "Visa Platinum 1246377376343588",
             "to": "Счет 14211924144426031657",
-        },
+        }
     ]
 
 
@@ -107,7 +107,7 @@ def filter_by_currency_result():
             "description": "Перевод с карты на карту",
             "from": "Visa Classic 6831982476737658",
             "to": "Visa Platinum 8990922113665229",
-        },
+        }
     ]
 
 
@@ -119,5 +119,5 @@ def transaction_descriptions_result():
         "Перевод со счета на счет",
         "Перевод со счета на счет",
         "Перевод с карты на карту",
-        "Перевод организации",
+        "Перевод организации"
     ]
