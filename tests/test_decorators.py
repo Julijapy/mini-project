@@ -1,3 +1,5 @@
+import pytest
+
 from src.decorators import log
 
 
@@ -19,3 +21,23 @@ def test_log_info_out(capsys):
     captured = capsys.readouterr()
     assert captured.out == "add_numbers ok\n"
 
+
+def test_log_err():
+    """ Тестирование декоратора при возврате ошибки"""
+    @log()
+    def division(a, b):
+        return a / b
+    with pytest.raises(ZeroDivisionError):
+        division(1, 0)
+
+
+def test_log_err_out(capsys):
+    """ Тестирование декоратора при выводе логируемой информации в консоль с ошибкой"""
+    @log()
+    def division(a, b):
+        return a / b
+
+    with pytest.raises(ZeroDivisionError):
+        division(1, 0)
+    captured = capsys.readouterr()
+    assert captured.out == "division error: ZeroDivisionError. Inputs: (1, 0), {}\n"
