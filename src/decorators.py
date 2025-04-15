@@ -2,6 +2,7 @@ from functools import wraps
 
 
 def log(filename=None):
+    """ Декоратор, который автоматически регистрирует детали выполнения функций"""
     def my_decor(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -11,6 +12,7 @@ def log(filename=None):
                 if filename:
                     with open(filename, 'a', encoding="utf-8") as text:
                         text.write(log_info)
+                        text.write("\n")
                 else:
                     print(log_info)
                 return result
@@ -19,6 +21,7 @@ def log(filename=None):
                 if filename:
                     with open(filename, 'a', encoding="utf-8") as text:
                         text.write(log_error)
+                        text.write("\n")
                 else:
                     print(log_error)
                 raise e
