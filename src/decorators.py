@@ -11,11 +11,12 @@ def log(filename=None): # filename = необяз параметр.
                     print(log_info)
                 return result
             except Exception as e:
-                log_error = f'{func.__name__} error: {type(e).__name__}.Inputs: {args}, {kwargs}'
+                log_error = f'{func.__name__} error: {type(e).__name__}. Inputs: {args}, {kwargs}'
                 if filename:
                     with open(filename, 'a') as text:
                         text.write(log_error)
                 else:
                     print(log_error)
+                raise e
         return wrapper
     return decorator
