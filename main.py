@@ -1,5 +1,5 @@
-from src.generators import (card_number_generator, filter_by_currency,
-                            transaction_descriptions)
+from src.decorators import log
+from src.generators import card_number_generator, filter_by_currency, transaction_descriptions
 
 transactions = [
     {
@@ -96,4 +96,11 @@ def get_card_number_info():
     except StopIteration:
         return "Список транзакций пуст"
 
-# homework_11_1 done
+
+@log(filename="logs/mylog.txt")
+def func(x, y):
+    """Проверка работоспособности функции при записи логов в файл"""
+    return x + y
+
+
+func(1, 2)
